@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 
+
 public class PasswordManager<T> {
     private ArrayList<PasswordStorage> passwordList = new ArrayList<>();
 
@@ -46,7 +47,7 @@ public class PasswordManager<T> {
     public void removeEntry(String toRemove) {
         try {
             if (toRemove.equals(passwordList.get(findEntry(toRemove)).getUsername())) {
-                passwordList.remove(toRemove);
+                passwordList.remove(findEntry(toRemove));
                 System.out.println(toRemove + " wurde entfernt");
             }
         } catch (IndexOutOfBoundsException e) {
@@ -55,12 +56,14 @@ public class PasswordManager<T> {
     }
 
     public void showPassword(String username) {
-        try {
-            if (username.equals(passwordList.get(findEntry(username)).getUsername())) {
-                System.out.println("Das Passwort lautet: " + passwordList.get(findEntry(username)).getPassword());
+        for (int i = 0; i < passwordList.size(); i++) {
+            try {
+                if (username.equals(passwordList.get(i).getUsername())) {
+                    System.out.println("Das Passwort lautet: " + passwordList.get(i).getPassword());
+                }
+            } catch (IndexOutOfBoundsException e) {
+                System.out.println("Der Benutzer " + username + " ist nicht vorhanden");
             }
-        } catch (IndexOutOfBoundsException e) {
-            System.out.println("Der Benutzer " + username + " ist nicht vorhanden");
         }
     }
 }
@@ -102,32 +105,29 @@ class PasswordManagerMain {
         printMenu();
 
         while (!quit) {
-            System.out.println("Bitte Aktion auswählen: ");
-            int action = new java.util.Scanner(System.in).nextInt();
-
-            switch (action) {
-                case 0:
-                    printMenu();
-                    break;
-                case 1:
-                    addEntry();
-                    break;
-                case 2:
-                    store.printList();
-                    break;
-                case 3:
-                    showPassword();
-                    break;
-                case 4:
-                    removeEntry();
-                    break;
-                case 5:
-                    quit = true;
-                    break;
+                System.out.println("Bitte Aktion auswählen: ");
+                int action = new java.util.Scanner(System.in).nextInt();
+                switch (action) {
+                    case 0:
+                        printMenu();
+                        break;
+                    case 1:
+                        addEntry();
+                        break;
+                    case 2:
+                        store.printList();
+                        break;
+                    case 3:
+                        showPassword();
+                        break;
+                    case 4:
+                        removeEntry();
+                        break;
+                    case 5:
+                        quit = true;
+                        break;
+                }
             }
-
-        }
-
     }
 
     private static void addEntry() {
